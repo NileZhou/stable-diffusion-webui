@@ -236,7 +236,7 @@ def run_extensions_installers(settings_file):
         run_extension_installer(os.path.join(extensions_dir, dirname_extension))
 
 
-def prepare_environment():
+def prepare_environment(git_update_now=False):
     torch_command = os.environ.get('TORCH_COMMAND', "pip install torch==2.0.1 torchvision==0.15.2 --extra-index-url https://download.pytorch.org/whl/cu118")
     requirements_file = os.environ.get('REQS_FILE', "requirements_versions.txt")
 
@@ -299,11 +299,12 @@ def prepare_environment():
 
     os.makedirs(os.path.join(script_path, dir_repos), exist_ok=True)
 
-    git_clone(stable_diffusion_repo, repo_dir('stable-diffusion-stability-ai'), "Stable Diffusion", stable_diffusion_commit_hash)
-    git_clone(taming_transformers_repo, repo_dir('taming-transformers'), "Taming Transformers", taming_transformers_commit_hash)
-    git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
-    git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
-    git_clone(blip_repo, repo_dir('BLIP'), "BLIP", blip_commit_hash)
+    if git_update_now:
+        git_clone(stable_diffusion_repo, repo_dir('stable-diffusion-stability-ai'), "Stable Diffusion", stable_diffusion_commit_hash)
+        git_clone(taming_transformers_repo, repo_dir('taming-transformers'), "Taming Transformers", taming_transformers_commit_hash)
+        git_clone(k_diffusion_repo, repo_dir('k-diffusion'), "K-diffusion", k_diffusion_commit_hash)
+        git_clone(codeformer_repo, repo_dir('CodeFormer'), "CodeFormer", codeformer_commit_hash)
+        git_clone(blip_repo, repo_dir('BLIP'), "BLIP", blip_commit_hash)
 
     if not is_installed("lpips"):
         run_pip(f"install -r \"{os.path.join(repo_dir('CodeFormer'), 'requirements.txt')}\"", "requirements for CodeFormer")
@@ -367,7 +368,7 @@ def start():
 
 if __name__ == "__main__":
     os.environ['no_proxy'] = '*'  # 阻止requests库使用代理
-    stored_commit_hash = '89f9faa63388756314e8a1d96cf86bf5e0663045'  # fix model file fetch problem, 记住这个不能变，或者改成新的master commit(不能是develop分支的)
+    # stored_commit_hash = '89f9faa63388756314e8a1d96cf86bf5e0663045'  # fix model file fetch problem, 记住这个不能变，或者改成新的master commit(不能是develop分支的)
 
-    prepare_environment()
+    prepare_environment(git_update_now=False)  # 在该放的文件放好东西即可
     start()
