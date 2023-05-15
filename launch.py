@@ -367,6 +367,7 @@ def start():
 
 if __name__ == "__main__":
     os.environ['no_proxy'] = '*'  # 阻止requests库使用代理
+    stored_commit_hash = '89f9faa63388756314e8a1d96cf86bf5e0663045'  # fix model file fetch problem, 记住这个不能变，或者改成新的master commit(不能是develop分支的)
 
     prepare_environment()
     start()
