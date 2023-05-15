@@ -366,5 +366,7 @@ def start():
 
 
 if __name__ == "__main__":
+    os.environ['no_proxy'] = '*'  # 阻止requests库使用代理
+
     prepare_environment()
     start()
